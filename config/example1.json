@@ -1,0 +1,15 @@
+{
+"organism":"human",
+"path_to_output" : "pathToOutput/",
+"path_to_input" : "pathToInput",
+"path_to_cleaner" : "/home/luco/code/bash/whippet_filter_eventType_wrapped_for_psiOnly.sh",
+"files" :
+{
+"SAMPLE1" : [
+{"example1" : {  "R1": "example1_1.fastq","R2": "example1_2.fastq"}}
+]
+},
+"analysis":{
+"BREAST_CANCER_BEAUTY": { "SAMPLE": "SAMPLE1"}
+}
+}
