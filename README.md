@@ -11,7 +11,7 @@ First you need to install Whippet [here](https://github.com/timbitz/Whippet.jl)
 Here you will find the project manager [here](https://trello.com/b/XFuccCgE/splicingprojectcolab)
 Just in case if we want a clean follow-up of what we are doing.
 
-##1. Create json config for each fastq pair
+## 1. Create json config for each fastq pair
 
 ---
 
@@ -26,7 +26,7 @@ SAMPLE1 is a keyword. Do not change.
 example1 must be replace by the name of your sample.
 You need to set path to output and input directories.
 
-##2. Create whole listing of json configs
+## 2. Create whole listing of json configs
 
 ---
 
@@ -41,7 +41,7 @@ So you will have something like following :
 pathToConf/example1.json
 pathToConf/example2.json
 
-##3. Process sequentially for splicing analysis
+## 3. Process sequentially for splicing analysis
 
 ---
 ```shell
@@ -63,7 +63,7 @@ Here I show you a screenshot of what we have in the dir for experiment treated.
 ![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/main_output.png "Outputs")
 
 
-##4. Use Morpheus [here](https://software.broadinstitute.org/morpheus/) to visualise the matrice in a heatmap.
+## 4. Use Morpheus [here](https://software.broadinstitute.org/morpheus/) to visualise the matrice in a heatmap.
 
 ---
 
