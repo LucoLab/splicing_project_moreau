@@ -18,10 +18,6 @@ Each time, you need to change python3 path accordinly to your path depending of 
 
 ---
 
-```shell
-    /home/jean-philippe.villemin/anaconda3/bin/python3 createJsonConfForPsi.py -l samples.csv 
-```
-
 The script need to be changed depending on samples.csv format.  
 It should be something like ID_Project,FASQT1_NAME,FASTQ2_NAME.
 Hardcoded paths in the script need to be modified also.
@@ -51,21 +47,19 @@ It will read each line of listing.txt to access each json config.
 
 Wrapper.sh call the main script as follows using the config path received :
 
-##VERY IMPORTANT :
+##VERY IMPORTANT## :
 
 Now you need to set paramerers -j, -i and -r.
 -j : is the path to julia executable
 -i : path to whippet jls index
 -r : path to dir where you find annotSymbol.R
 
-```shell
-/home/jean-philippe.villemin/anaconda3/bin/python3 splicingWhippetPSI.py --config $1
-```
+So you need to modify accordingly to your own conf.
 
-So you need to modify accordingly to your own conf
+You can test for one sample if it works.
 
 ```shell
-/home/jean-philippe.villemin/anaconda3/bin/python3 splicingWhippetPSI.py --config $1  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia 
+nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
 ```
 
 
