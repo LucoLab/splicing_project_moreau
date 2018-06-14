@@ -2,10 +2,12 @@
 
 ---
 
+
 Scripts available here are in Python3.
 It's not required but advised to install Conda if python3 is not set up on your computer.
 It will make things easier then for installing tools or switching to older python version if needed.
 
+Look to INSTALL, every steps are documented.
 First you need to install Whippet [here](https://github.com/timbitz/Whippet.jl)  
 
 Here you will find the project manager [here](https://trello.com/b/XFuccCgE/splicingprojectcolab)
@@ -14,17 +16,13 @@ Just in case if we want a clean follow-up of what we are doing.
 ## 1. Create json config for each fastq pair
 
 
-Each time, you need to change python3 path accordinly to your path depending of home user.
+Each time, you need to change python3 path accordingly to your home user path.
 
 ---
 
-The script need to be changed depending on samples.csv format.  
-It should be something like ID_Project,FASQT1_NAME,FASTQ2_NAME.
-Hardcoded paths in the script need to be modified also.
-SAMPLE1 is a keyword. Do not change.
-example1 must be replace by the name of your sample.
-You need to set path to output and input directories.
-The script also a file called listing.json.per.sample.txt with all links to json configs to process sequencially in the next step.
+It creates all the json files used by the script.
+The json files are used to define path to input,output directories and name of each samples.
+The script will create a file called listing.json.per.sample.txt with all links to json configs to process sequencially in the next step.
 
 ```shell
      /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/createJsonConfForPsi.py \
@@ -34,9 +32,10 @@ The script also a file called listing.json.per.sample.txt with all links to json
      -s /home/jean-philippe.villemin/splicing_project_moreau/bash/whippet_filter_eventType_wrapped_for_psiOnly.sh 
 
 ```
+The output directory is set to moreau_splicing. Inside you will find _config_ dir with json files and _output_ dir where splicing results will be written. 
 
 
-## 3. Process sequentially for splicing analysis
+## 2. Process sequentially for splicing analysis
 
 ---
 ```shell
@@ -44,10 +43,11 @@ The script also a file called listing.json.per.sample.txt with all links to json
 ```
 
 It will read each line of listing.txt to access each json config.
+It's a loop in fact...  
 
-Wrapper.sh call the main script as follows using the config path received :
+Wrapper.sh calls the main script as follows using the config path received :
 
-##VERY IMPORTANT## :
+###### VERY IMPORTANT :
 
 Now you need to set paramerers -j, -i and -r.
 -j : is the path to julia executable
@@ -59,13 +59,13 @@ So you need to modify accordingly to your own conf.
 You can test for one sample if it works.
 
 ```shell
-nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
+nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/ -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
 ```
 
 
 Read whippet output to get an idea of what we have at the end.
 
-Here I show you a screenshot of what we have in the dir for experiment treated.
+Here I show you a screenshot of what we have in the directory output for one experiment treated.
 
 ![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/main_output.png "Outputs")
 
