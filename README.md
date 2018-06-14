@@ -39,7 +39,7 @@ The output directory is set to moreau_splicing. Inside you will find _config_ di
 
 ---
 ```shell
-	cat listing.json.per.sample.txt| xargs -n 1  -I %  wrapper.sh 
+	cat listing.json.per.sample.txt| xargs -n 1  -I %  wrapper.sh % 
 ```
 
 It will read each line of listing.txt to access each json config.
@@ -61,7 +61,11 @@ You can test for one sample if it works.
 ```shell
 nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/ -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
 ```
+Then for all
 
+```shell
+nohup cat listing.json.per.sample.test.txt | xargs -n 1  -I %  ../splicing_project_moreau/bash/wrapper.sh %  & 
+```
 
 Read whippet output to get an idea of what we have at the end.
 
