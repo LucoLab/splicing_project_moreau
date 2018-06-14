@@ -13,10 +13,13 @@ Just in case if we want a clean follow-up of what we are doing.
 
 ## 1. Create json config for each fastq pair
 
+
+Each time, you need to change python3 path accordinly to your path depending of home user.
+
 ---
 
 ```shell
-    python3 createJsonConfForPsi.py -l samples.csv 
+    /home/jean-philippe.villemin/anaconda3/bin/python3 createJsonConfForPsi.py -l samples.csv 
 ```
 
 The script need to be changed depending on samples.csv format.  
@@ -48,7 +51,7 @@ It will read each line of listing.txt to access each json config.
 
 Wrapper.sh call the main script as follows using the config path received :
 
-VERY IMPORTANT :
+##VERY IMPORTANT :
 
 Now you need to set paramerers -j, -i and -r.
 -j : is the path to julia executable
@@ -56,13 +59,13 @@ Now you need to set paramerers -j, -i and -r.
 -r : path to dir where you find annotSymbol.R
 
 ```shell
-python3 splicingWhippetPSI.py --config $1
+/home/jean-philippe.villemin/anaconda3/bin/python3 splicingWhippetPSI.py --config $1
 ```
 
 So you need to modify accordingly to your own conf
 
 ```shell
-python3 splicingWhippetPSI.py --config $1  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia 
+/home/jean-philippe.villemin/anaconda3/bin/python3 splicingWhippetPSI.py --config $1  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia 
 ```
 
 
@@ -82,5 +85,5 @@ Also I was using an another bed to get a subset of the matrice for exon of inter
 Need to be modified.
 
 ```shell
-    prepareDataForHeatmap.py  -l listing.csv  -d /home/jean-philippe.villemin/lakitu/PROJECT/BEAUTY/output/ -e specific.bed.tsv
+    /home/jean-philippe.villemin/anaconda3/bin/python3 prepareDataForHeatmap.py  -l listing.csv  -d /home/jean-philippe.villemin/lakitu/PROJECT/BEAUTY/output/ -e specific.bed.tsv
 ```
