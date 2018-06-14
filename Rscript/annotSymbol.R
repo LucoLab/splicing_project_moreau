@@ -19,12 +19,14 @@
 #####################################  Package Loading  ############################
 ####################################################################################
 suppressWarnings(suppressMessages(library(data.table)))
-suppressWarnings(suppressMessages(library(reshape2)))
 suppressWarnings(suppressMessages(library(GenomicFeatures)))
 suppressWarnings(suppressMessages(library(AnnotationDbi)))
 suppressWarnings(suppressMessages(library(biomaRt)))
 suppressWarnings(suppressMessages(library(plyr)))
 suppressWarnings(suppressMessages(library(optparse)))
+
+#suppressWarnings(suppressMessages(library(reshape2)))
+
 ####################################################################################
 ######################### Parameters  ##############################################
 ####################################################################################
@@ -71,9 +73,8 @@ if (opt$organism=="mouse") {
 }
 if (opt$organism=="human") {
 	print("Organism : Human")
-
 	organism = "hsapiens_gene_ensembl"
-	host="jul2016.archive.ensembl.org"
+	host="ensembl.org"
 	symbol_description='hgnc_symbol'
 
 }
