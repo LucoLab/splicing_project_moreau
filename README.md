@@ -25,36 +25,46 @@ Hardcoded paths in the script need to be modified also.
 SAMPLE1 is a keyword. Do not change.
 example1 must be replace by the name of your sample.
 You need to set path to output and input directories.
-
-## 2. Create whole listing of json configs
-
----
-
-If you set all your json configs in a dir. Use a command like 'find' to print all the paths in file to use then in the nex step.
+The script also a file called listing.json.per.sample.txt with all links to json configs to process sequencially in the next step.
 
 ```shell
-	find path2directory -name *.json > listing.txt
+     /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/createJsonConfForPsi.py \
+     -l /home/jean-philippe.villemin/samples.txt \
+     -i /eqmoreaux/data/global_data/MMC/RNAseq/FASTQ/ \
+     -o /home/jean-philippe.villemin/moreau_splicing/ \
+     -s /home/jean-philippe.villemin/splicing_project_moreau/bash/whippet_filter_eventType_wrapped_for_psiOnly.sh 
+
 ```
 
-So you will have something like following : 
-
-pathToConf/example1.json
-pathToConf/example2.json
 
 ## 3. Process sequentially for splicing analysis
 
 ---
 ```shell
-	cat listing.txt | xargs -n 1  -I %  wrapper.sh 
+	cat listing.json.per.sample.txt| xargs -n 1  -I %  wrapper.sh 
 ```
 
 It will read each line of listing.txt to access each json config.
 
 Wrapper.sh call the main script as follows using the config path received :
 
+VERY IMPORTANT :
+
+Now you need to set paramerers -j, -i and -r.
+-j : is the path to julia executable
+-i : path to whippet jls index
+-r : path to dir where you find annotSymbol.R
+
 ```shell
 python3 splicingWhippetPSI.py --config $1
 ```
+
+So you need to modify accordingly to your own conf
+
+```shell
+python3 splicingWhippetPSI.py --config $1  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia 
+```
+
 
 Read whippet output to get an idea of what we have at the end.
 
