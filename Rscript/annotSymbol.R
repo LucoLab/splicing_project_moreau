@@ -19,12 +19,14 @@
 #####################################  Package Loading  ############################
 ####################################################################################
 suppressWarnings(suppressMessages(library(data.table)))
-suppressWarnings(suppressMessages(library(reshape2)))
 suppressWarnings(suppressMessages(library(GenomicFeatures)))
 suppressWarnings(suppressMessages(library(AnnotationDbi)))
 suppressWarnings(suppressMessages(library(biomaRt)))
 suppressWarnings(suppressMessages(library(plyr)))
 suppressWarnings(suppressMessages(library(optparse)))
+
+#suppressWarnings(suppressMessages(library(reshape2)))
+
 ####################################################################################
 ######################### Parameters  ##############################################
 ####################################################################################
@@ -71,15 +73,17 @@ if (opt$organism=="mouse") {
 }
 if (opt$organism=="human") {
 	print("Organism : Human")
-
 	organism = "hsapiens_gene_ensembl"
-	host="jul2016.archive.ensembl.org"
+	host="www.ensembl.org"
 	symbol_description='hgnc_symbol'
 
 }
 
+edb = useMart(dataset=organism,biomart="ENSEMBL_MART_ENSEMBL", host="uswest.ensembl.org")
+
 # BIOMART OBJECT
-edb = useMart("ENSEMBL_MART_ENSEMBL", dataset=organism,host=host)
+
+
 colnames(sampleTable)[colnames(sampleTable) == 'gene'] <- 'ensembl_gene_id'
 
 # Retrieve gene infos And entrezeneId needed fr KEGGPATHWAY
@@ -99,6 +103,6 @@ filewithoutExtension= unlist(strsplit(opt$file, split='.csv', fixed=TRUE))[1]
 output=paste(c(filewithoutExtension,"annoted.csv"),collapse="")
 output
 
-write.csv(res_annotated,row.names=FALSE,file=output,quote = FALSE,sep="\t")
+write.table(res_annotated,row.names=FALSE,file=output,quote = FALSE,sep="\t")
 
  }

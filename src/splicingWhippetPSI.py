@@ -82,11 +82,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=textwrap.dedent ('''\
     Thi script will launch rmats on fastq.
     Example :
-    python3 /home/luco/code/python/splicingWhippetPSI.py -c /home/luco/PROJECT/BEAUTY/BREAST_CANCER.json
-
+    python3 /home/luco/code/python/splicingWhippetPSI.py --config $1 -i /home/jean-philippe.villemin/index_whippet_human -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/annotSymbol.R -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia 
     '''),formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument("-c","--config",action="store",help="Path to a json file.",required=True,type=str,dest='file_config')
+    parser.add_argument("-i","--index",action="store",help="Path to index directory.",required=True,type=str,dest='index')
+    parser.add_argument("-r","--Rpath",action="store",help="Path to index directory.",required=True,type=str,dest='Rpath')
+    parser.add_argument("-j","--juliaPath",action="store",help="Path to index directory.",required=True,type=str,dest='juliaPath')
 
     parameters = parser.parse_args()
 
@@ -100,11 +102,8 @@ if __name__ == '__main__':
     logger.info("file_config : "+parameters.file_config)
     logger.info("path_to_output : "+config.parameters['path_to_output'])
 
-    index_path="None"
-    if (config.parameters['organism']=="human") :
-        index_path="/home/luco/index_whippet/human/human_index_whippet"
-    if (config.parameters['organism']=="mouse") :
-        index_path="/home/luco/index_whippet/mouse/mouse_index_whippet"
+    index_path=parameters.index
+   
 
     logger.info("organism : "+config.parameters['organism'])
     logger.info("index_path : "+index_path)
@@ -132,9 +131,9 @@ if __name__ == '__main__':
                         logger.info(hash_values.get("R1"))
                         logger.info(hash_values.get("R2"))
                         if(hash_values.get("R2")=="None" ) :
-                            execLine = "julia /home/luco/soft/Whippet.jl-master/bin/whippet-quant.jl -x "+index_path+" "+config.parameters['path_to_input']+hash_values.get("R1")+" -o "+config.parameters['path_to_output']+hash_key
+                            execLine = parametersjuliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+" "+config.parameters['path_to_input']+hash_values.get("R1")+" -o "+config.parameters['path_to_output']+hash_key
                         else :
-                            execLine = "julia /home/luco/soft/Whippet.jl-master/bin/whippet-quant.jl -x "+index_path+"  "+config.parameters['path_to_input']+hash_values.get("R1")+" "+config.parameters['path_to_input']+hash_values.get("R2")+" -o "+config.parameters['path_to_output']+hash_key
+                            execLine = parametersjuliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+"  "+config.parameters['path_to_input']+hash_values.get("R1")+" "+config.parameters['path_to_input']+hash_values.get("R2")+" -o "+config.parameters['path_to_output']+hash_key
 
                         logger.info(execLine)
 
@@ -182,10 +181,13 @@ if __name__ == '__main__':
                     filter = subprocess.run((filter_command),stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True,shell=True)
                     write_subprocess_log(filter,logger)
                     logger.info("====> annotate ")
-                    Rcommand ="Rscript /home/luco/code/R/annotSymbol.R --organism="+config.parameters['organism']+" --file="+config.parameters['path_to_output']+hash_keyTest+"."+event+".psi"
+                    Rcommand ="Rscript "+parameters.Rpath+"annotSymbol.R --organism="+config.parameters['organism']+" --file="+config.parameters['path_to_output']+hash_keyTest+"."+event+".psi"
                     logger.info(Rcommand)
                     R = subprocess.run((Rcommand),stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True,shell=True)
                     write_subprocess_log(R,logger)
                     logger.info("====> remove Intermediates ")
                     subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+"."+event+".psi"),shell=True)
                     subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+".psi"),shell=True)
+                    
+                    
+                    
