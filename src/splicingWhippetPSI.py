@@ -131,9 +131,9 @@ if __name__ == '__main__':
                         logger.info(hash_values.get("R1"))
                         logger.info(hash_values.get("R2"))
                         if(hash_values.get("R2")=="None" ) :
-                            execLine = parametersjuliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+" "+config.parameters['path_to_input']+hash_values.get("R1")+" -o "+config.parameters['path_to_output']+hash_key
+                            execLine = parameters.juliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+" "+config.parameters['path_to_input']+hash_values.get("R1")+" -o "+config.parameters['path_to_output']+hash_key
                         else :
-                            execLine = parametersjuliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+"  "+config.parameters['path_to_input']+hash_values.get("R1")+" "+config.parameters['path_to_input']+hash_values.get("R2")+" -o "+config.parameters['path_to_output']+hash_key
+                            execLine = parameters.juliaPath+" ~/.julia/v0.6/Whippet/bin/whippet-quant.jl -x "+index_path+"  "+config.parameters['path_to_input']+hash_values.get("R1")+" "+config.parameters['path_to_input']+hash_values.get("R2")+" -o "+config.parameters['path_to_output']+hash_key
 
                         logger.info(execLine)
 
