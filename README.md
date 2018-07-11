@@ -73,15 +73,40 @@ Here I show you a screenshot of what we have in the directory output for one exp
 
 ![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/main_output.png "Outputs")
 
+## 4. Create PSI Matrice by concatening all Samples 
 
-## 4. Use Morpheus [here](https://software.broadinstitute.org/morpheus/) to visualise the matrice in a heatmap.
+This will create a matrice named output.tsv.
+
+```shell
+/home/luco/localLib/anaconda3/bin/python3 /home/luco/code/python/prepareDataForHeatmap.py  -l /home/luco/PROJECT/BEAUTY/BEAUTY_ID2GROUP.tsv -d /home/luco/PROJECT/BEAUTY/output/ -e /home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv```
+
+Examples are given in config dir for the files used by the script.
+_BEAUTY_ID2GROUP.tsv_ is just a two columns file with nameOfPatient & group.  
+
+*I strongly advise to regenerate CE.whippet.tsv yourself or at least check it correspond to file.CE.psiannoted.csv (same number of lines, orderded the same way...)* It depends of the version gtf you used. Exons can be ordered differently, removed or added.
+
+Take any file.CE.psiannoted.csv  and apply the following command to regenerate it properly from your dataset.
+
+```shell
+/usr/bin/gawk -F ","  'BEGIN {OFS="\t";}  {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv ```
+
+## 4. Apply filtering to this matrice
+
+Now you get the whole matrice, you need to apply fitlters.
+You can do it by yourself with your own scripts or I provide some tools.
+
+```shell
+python3 /home/luco/code/python/filterHeatmap.py  -m /home/luco/PROJECT/BEAUTY/output.tsv -g /home/luco/PROJECT/BEAUTY/genes.txt
+ ```
+
+This script work with a provided list of genes symbol. It also use a cluster algorithm (scikit-learn : DBSCAN, harcoded eps=0.3, min_samples  10) to detect some potential splicing changes between groups.  So your are not force to use a gene lists. It's optional but recommanded because the cluster algorithm is not optimal yet.  
+
+
+## 5. Use Morpheus [here](https://software.broadinstitute.org/morpheus/) to visualise the matrice in a heatmap.
 
 ---
 
-I was using this script to parse all outputs to grap the psi values from different experiments an concat them in one matrice. 
-Also I was using an another bed to get a subset of the matrice for exon of interest.
-Need to be modified.
+At the end a quick way to visualize your matrice is this tool.
+Try it, play with it. It's cool.
 
-```shell
-    /home/jean-philippe.villemin/anaconda3/bin/python3 prepareDataForHeatmap.py  -l listing.csv  -d /home/jean-philippe.villemin/lakitu/PROJECT/BEAUTY/output/ -e specific.bed.tsv
-```
+
