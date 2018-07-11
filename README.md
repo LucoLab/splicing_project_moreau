@@ -95,7 +95,7 @@ Take any file.CE.psiannoted.csv  and apply the following command to regenerate i
 ## 4. Apply filters to this matrice
 
 Now you get the whole matrice, you need to apply fitlters.
-You can do it by yourself with your own scripts or I provide some tools.
+You can do it by yourself with your own scripts or I provide some tools that will create a output_filtered.tsv file
 
 ```shell
 python3 /home/luco/code/python/filterHeatmap.py  -m /home/luco/PROJECT/BEAUTY/output.tsv -g /home/luco/PROJECT/BEAUTY/genes.txt
