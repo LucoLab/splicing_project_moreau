@@ -73,12 +73,13 @@ Here I show you a screenshot of what we have in the directory output for one exp
 
 ![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/main_output.png "Outputs")
 
-## 4. Create PSI Matrice by concatening all Samples 
+## 3. Create PSI Matrice by concatening all Samples 
 
 This will create a matrice named output.tsv.
 
 ```shell
-/home/luco/localLib/anaconda3/bin/python3 /home/luco/code/python/prepareDataForHeatmap.py  -l /home/luco/PROJECT/BEAUTY/BEAUTY_ID2GROUP.tsv -d /home/luco/PROJECT/BEAUTY/output/ -e /home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv```
+/home/luco/localLib/anaconda3/bin/python3 /home/luco/code/python/prepareDataForHeatmap.py  -l /home/luco/PROJECT/BEAUTY/BEAUTY_ID2GROUP.tsv -d /home/luco/PROJECT/BEAUTY/output/ -e /home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv
+```
 
 Examples are given in config dir for the files used by the script.
 _BEAUTY_ID2GROUP.tsv_ is just a two columns file with nameOfPatient & group.  
@@ -88,9 +89,10 @@ _BEAUTY_ID2GROUP.tsv_ is just a two columns file with nameOfPatient & group.
 Take any file.CE.psiannoted.csv  and apply the following command to regenerate it properly from your dataset.
 
 ```shell
-/usr/bin/gawk -F ","  'BEGIN {OFS="\t";}  {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv ```
+/usr/bin/gawk -F ","  'BEGIN {OFS="\t";}  {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv 
+```
 
-## 4. Apply filtering to this matrice
+## 4. Apply filters to this matrice
 
 Now you get the whole matrice, you need to apply fitlters.
 You can do it by yourself with your own scripts or I provide some tools.
