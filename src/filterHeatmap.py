@@ -26,6 +26,7 @@ from sklearn.cluster import KMeans
 import pandas as pd
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
+import scipy.stats as stats
 
 ###########################################################################################################
 ########################################   Functions   ####################################################
@@ -158,6 +159,8 @@ def read_genes(path2file) :
             
     return list(genes)
 
+def chunks(l,n):
+    return [i.tolist() for i in np.split(np.array(l),n)]
 
 ###########################################################################################################
 ########################################   Main   #########################################################
@@ -218,14 +221,35 @@ if __name__ == '__main__':
             #array= array.reshape(1, -1) #if it contains a single sample
             array= array.reshape(-1, 1) # single feature
             
+            flat_list = [item for sublist in array for item in sublist]
+            
+      
+            if (len(flat_list)==0) :
+                continue
+            
+            print(flat_list)
+            print(np.var(flat_list))
+            
+            if (np.var(flat_list)< 0.01):
+                continue
+            
             if len(array) == 0:
                 countLine+=1
                 continue
-
-            db = DBSCAN(eps=0.3, min_samples=10).fit(array)
+            
+            min_samples = int(len(array)/3)
+            
+            if (min_samples==0):
+                countLine+=1
+                continue
+            
+            #print(list(array))
+           
+            db = DBSCAN(eps=0.3, min_samples=min_samples).fit(array)
             core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
             core_samples_mask[db.core_sample_indices_] = True
             labels = db.labels_
+         
             # Number of clusters in labels, ignoring noise if present.
             n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
            

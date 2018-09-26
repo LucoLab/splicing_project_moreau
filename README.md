@@ -59,7 +59,8 @@ So you need to modify accordingly to your own conf.
 You can test for one sample if it works.
 
 ```shell
-nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls  -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/ -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
+nohup /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/splicingWhippetPSI.py \ --config /home/jean-philippe.villemin/moreau_splicing/config/E10061.json  -i /home/jean-philippe.villemin/index_whippet_human.jls \ 
+ -r /home/jean-philippe.villemin/splicing_project_moreau/Rscript/ -j /home/jean-philippe.villemin/julia-d55cadc350/bin/julia &
 ```
 Then for all
 
@@ -78,7 +79,8 @@ Here I show you a screenshot of what we have in the directory output for one exp
 This will create a matrice named output.tsv.
 
 ```shell
-/home/luco/localLib/anaconda3/bin/python3 /home/luco/code/python/prepareDataForHeatmap.py  -l /home/luco/PROJECT/BEAUTY/BEAUTY_ID2GROUP.tsv -d /home/luco/PROJECT/BEAUTY/output/ -e /home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv
+/home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/prepareDataForHeatmap.py \ -l /home/jean-philippe.villemin/moreau_splicing/ID_2_GROUP.tsv -d /home/jean-philippe.villemin/moreau_splicing/output/ \
+ -e /home/jean-philippe.villemin/moreau_splicing/output/CE.whippet.tsv
 ```
 
 Examples are given in config dir for the files used by the script.
@@ -89,8 +91,12 @@ _BEAUTY_ID2GROUP.tsv_ is just a two columns file with nameOfPatient & group.
 Take any file.CE.psiannoted.csv  and apply the following command to regenerate it properly from your dataset.
 
 ```shell
-/usr/bin/gawk -F ","  'BEGIN {OFS="\t";}  {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv 
+/usr/bin/gawk -F ","  'BEGIN {OFS="\t";} \
+ {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5,$2 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv > CE.whippet.tsv
 ```
+
+You should end with something as follows : 
+![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/output_matrice.png "Matrice")
 
 ## 4. Apply filters to this matrice
 
@@ -98,7 +104,7 @@ Now you get the whole matrice, you need to apply fitlters.
 You can do it by yourself with your own scripts or I provide some tools that will create a output_filtered.tsv file
 
 ```shell
-python3 /home/luco/code/python/filterHeatmap.py  -m /home/luco/PROJECT/BEAUTY/output.tsv -g /home/luco/PROJECT/BEAUTY/genes.txt
+/home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/filterHeatmap.py  -m /home/jean-philippe.villemin/moreau_splicing/output.tsv -g /home/jean-philippe.villemin/splicing_project_moreau/config/genes.txt
  ```
 
 This script work with a provided list of genes symbol. It also use a cluster algorithm (scikit-learn : DBSCAN, harcoded eps=0.3, min_samples  10) to detect some potential splicing changes between groups.  So your are not force to use a gene lists. It's optional but recommanded because the cluster algorithm is not optimal yet.  
@@ -111,4 +117,10 @@ This script work with a provided list of genes symbol. It also use a cluster alg
 At the end a quick way to visualize your matrice is this tool.
 Try it, play with it. It's cool.
 
+Several advices : First change color settings (set white for 0 and blue for 1). 
+Use relative color setting. A
+pply hierarchical clustering per columns & rows. Or you can apply kmeans clustering techniques.
 
+
+You should end with something as follows : 
+![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/heatmap.png "heatmap")
