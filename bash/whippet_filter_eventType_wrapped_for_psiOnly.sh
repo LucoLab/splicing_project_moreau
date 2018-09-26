@@ -47,7 +47,7 @@ echo ${PATH}${FILE}.psi
 if [ ${EVENT} == "CE" ] || [ ${EVENT} == "SE"  ] ; then
 
 TYPE="CE"
-/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="CE" && $6!="NA"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="CE"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
 
 fi
 #################################################################
@@ -55,7 +55,7 @@ fi
 if [ ${EVENT} == "A3SS" ] || [ ${EVENT} == "AA"  ] ; then
 
 TYPE="AA"
-/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AA" && $6!="NA"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AA"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
 
 
 fi
@@ -65,7 +65,7 @@ fi
 if [ ${EVENT} == "A5SS" ] || [ ${EVENT} == "AD"  ] ; then
 
 TYPE="AD"
-/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AD" && $6!="NA"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AD" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
 
 fi
 
@@ -75,7 +75,7 @@ if [ ${EVENT} == "RI" ] || [ ${EVENT} == "IR"  ] ; then
 
 
 TYPE="RI"
-/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="RI" && $6!="NA"  ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="RI" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
 
 
 fi
