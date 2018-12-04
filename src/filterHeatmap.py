@@ -162,6 +162,32 @@ def read_genes(path2file) :
 def chunks(l,n):
     return [i.tolist() for i in np.split(np.array(l),n)]
 
+def filter_by_percent_of_NA(list_value,percent_CutOff,gene,line):
+    
+    count = 0
+    for value in list_value :
+        if (value == "NA") :
+            count+=1
+            
+    #print (count)
+    #print (len(list_value))
+
+    percent = (count/len(list_value))*100
+    if (gene=="CLTCL1"): 
+        print(line)
+        print(list_value)
+        print(percent)
+        print(percent_CutOff)
+        
+    if ( percent >= percent_CutOff ) :
+        #print(percent)
+        #print(percent_CutOff)
+        #print(list_value)
+        
+        return True
+    else : return False
+        
+        
 ###########################################################################################################
 ########################################   Main   #########################################################
 ###########################################################################################################
@@ -179,7 +205,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=textwrap.dedent ('''\
     This script will clean the matrice with all psi.  
     Example : 
-    python3 /home/luco/code/python/filterHeatmap.py  -m /home/luco/PROJECT/BEAUTY/output.tsv -g /home/luco/PROJECT/BEAUTY/genes.txt
+    /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/filterHeatmap.py  -m /home/jean-philippe.villemin/output_copy.tsv
 
     '''),formatter_class=argparse.RawDescriptionHelpFormatter)
     
@@ -195,6 +221,7 @@ if __name__ == '__main__':
     
     result = open(os.path.dirname(parameters.matrice)+"/"+"output_filtered.tsv","w")
 
+    countNAremoved = 0
     countLine = 0
     with open(parameters.matrice) as lines:
         for line in lines: 
@@ -211,45 +238,45 @@ if __name__ == '__main__':
             if (gene in genes ) :
                 result.write(line)
             
+          
+            
             '''
             Clustering Part
             '''
+            
+            # Remove gene where more than 50 % NA values computed
+            if (filter_by_percent_of_NA(elements[2:],25,elements[0],line)==True) :
+                
+                countNAremoved+=1
+                continue
+            
+            #print(elements[2:])
 
             array=np.asarray(elements[2:])
             array = pd.to_numeric(array, errors='coerce')
             array = array[~np.isnan(array)]
+            #print(array)
             #array= array.reshape(1, -1) #if it contains a single sample
             array= array.reshape(-1, 1) # single feature
-            
             flat_list = [item for sublist in array for item in sublist]
-            
-      
-            if (len(flat_list)==0) :
+
+            if (np.var(flat_list)< 0.05):
+                #print(np.var(flat_list))
+                #print(flat_list)
                 continue
             
-            print(flat_list)
-            print(np.var(flat_list))
-            
-            if (np.var(flat_list)< 0.01):
-                continue
-            
-            if len(array) == 0:
-                countLine+=1
-                continue
-            
-            min_samples = int(len(array)/3)
-            
-            if (min_samples==0):
-                countLine+=1
-                continue
-            
-            #print(list(array))
-           
+            #print("Size patients list with value")
+            #print(len(flat_list))
+
+            '''
+            min_samples = int(len(array)/5)
+            #print(min_samples)
+
             db = DBSCAN(eps=0.3, min_samples=min_samples).fit(array)
             core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
             core_samples_mask[db.core_sample_indices_] = True
             labels = db.labels_
-         
+            #print(labels)
             # Number of clusters in labels, ignoring noise if present.
             n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
            
@@ -258,14 +285,16 @@ if __name__ == '__main__':
                 print(elements[0])
                 print(elements[1])
                 print('Estimated number of clusters: %d' % n_clusters_)
-                result.write(line)
+               
+            '''
 
-            '''
-            End
-            '''
-  
+            result.write(line)
             countLine+=1
             
         lines.close()      
   
     result.close() 
+    
+print("Genes removed because of NA values.")
+print(countNAremoved)
+print(countLine)
