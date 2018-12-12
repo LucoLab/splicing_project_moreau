@@ -76,7 +76,22 @@ Here I show you a screenshot of what we have in the directory output for one exp
 
 ## 3. Create PSI Matrice by concatening all Samples 
 
-This will create a matrice named output.tsv.
+
+Take any file.CE.psiannoted.csv  and apply the following command to regenerate it properly from your dataset.
+
+```shell
+/usr/bin/gawk -F ","  'BEGIN {OFS="\t";} \
+ {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5,$2 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv > CE.whippet.tsv
+```
+
+You should end with something as follows : 
+![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/output_matrice.png "Matrice")
+
+DO THAT FOR ALL KIND OF EVENTS.  
+You should end with AD.whippet.tsv , AA.whippet.tsv etc...(a total of 8 files for 8 types of event)
+
+
+This will create a matrice named output.tsv for the event you will process. Here CE.whippet.tsv. Rename the output.tsv after each run to not rewrite in it.
 
 ```shell
 /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/prepareDataForHeatmap.py \ -l /home/jean-philippe.villemin/moreau_splicing/ID_2_GROUP.tsv -d /home/jean-philippe.villemin/moreau_splicing/output/ \
@@ -88,15 +103,6 @@ _BEAUTY_ID2GROUP.tsv_ is just a two columns file with nameOfPatient & group.
 
 *I strongly advise to regenerate CE.whippet.tsv yourself or at least check it correspond to file.CE.psiannoted.csv (same number of lines, orderded the same way...)* It depends of the version gtf you used. Exons can be ordered differently, removed or added.
 
-Take any file.CE.psiannoted.csv  and apply the following command to regenerate it properly from your dataset.
-
-```shell
-/usr/bin/gawk -F ","  'BEGIN {OFS="\t";} \
- {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5,$2 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv > CE.whippet.tsv
-```
-
-You should end with something as follows : 
-![alt text](https://github.com/LucoLab/splicing_project_moreau/blob/master/img/output_matrice.png "Matrice")
 
 ## 4. Apply filters to this matrice
 
