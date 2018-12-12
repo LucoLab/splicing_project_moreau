@@ -81,6 +81,45 @@ TYPE="RI"
 fi
 
 #################################################################
+ 
+if [ ${EVENT} == "TS" ] ; then
+
+TYPE="TS"
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="TS" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+
+
+fi
+#################################################################
+#################################################################
+ 
+if [ ${EVENT} == "TE" ] ; then
+
+TYPE="TE"
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="TE" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+
+
+fi
+
+#################################################################
+ 
+if [ ${EVENT} == "AF" ] ; then
+
+TYPE="AF"
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AF" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+
+
+fi
+#################################################################
+ 
+if [ ${EVENT} == "AL" ] ; then
+
+TYPE="AL"
+/usr/bin/gawk -F "\t"  'BEGIN {OFS="\t";}  {  if ( match($1, "^(\\w+)\\.([0-9]+)", ary) && $5=="AL" ) print ary[1],$3,$4,$5,$6,$9,$10,$11 ;}' ${PATH}${FILE}.psi  > ${PATH}${FILE}.${TYPE}.psi
+
+
+fi
+
+
 /bin/sed -i $'1 i\\\ngene\tcoordinates\tstrand\tevent\tpsi\ttotalReads\tcomplexity\tentropy' ${PATH}${FILE}.${TYPE}.psi
 
 

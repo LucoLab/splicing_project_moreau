@@ -169,7 +169,7 @@ if __name__ == '__main__':
 
                 logger.info(config.parameters['path_to_output']+hash_keyTest+".psi")
 
-                for event in ["CE"] : #,"AA","AD","RI"
+                for event in ["CE","AA","AD","RI","AF","AL","TE","TS"] : #
 
                     if(os.path.isfile(config.parameters['path_to_output']+hash_keyTest+"."+event+".psi")) :
                         continue
@@ -186,8 +186,8 @@ if __name__ == '__main__':
                     R = subprocess.run((Rcommand),stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True,shell=True)
                     write_subprocess_log(R,logger)
                     logger.info("====> remove Intermediates ")
-                    subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+"."+event+".psi"),shell=True)
-                    subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+".psi"),shell=True)
+                    #subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+"."+event+".psi"),shell=True)
+                    #subprocess.run(("rm "+config.parameters['path_to_output']+hash_keyTest+".psi"),shell=True)
                     
                     
                     
