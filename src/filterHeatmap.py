@@ -206,11 +206,13 @@ if __name__ == '__main__':
     This script will clean the matrice with all psi.  
     Example : 
     /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/filterHeatmap.py  -m /home/jean-philippe.villemin/output_copy.tsv
-
+    /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/filterHeatmap.py  -m /home/jean-philippe.villemin/moreau_splicing_test/CE.output.100.tsv -o CE_JP -a 3
     '''),formatter_class=argparse.RawDescriptionHelpFormatter)
     
     parser.add_argument("-m","--matrice",action="store",help="Matrice with all psi.",required=True,type=str,dest='matrice')
     parser.add_argument("-g","--genes",action="store",help="Genes Symbol you want to look at.",required=False,type=str,dest='genes')
+    parser.add_argument("-o","--output",action="store",help="Tag for output.",required=False,type=str,dest='output_tag')
+    parser.add_argument("-a","--annotation",action="store",help="Tag for output.",required=False,type=str,dest='number_of_annotation')
 
     parameters = parser.parse_args()
     #['ZNF836', 'chr19:52168057-52168152', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0.96', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1', 'NA', '1', '1', '1', '1', '1', '1']
@@ -219,7 +221,7 @@ if __name__ == '__main__':
     if (parameters.genes) :
         genes = read_genes(parameters.genes)
     
-    result = open(os.path.dirname(parameters.matrice)+"/"+"output_filtered.tsv","w")
+    result = open(os.path.dirname(parameters.matrice)+"/"+parameters.output_tag+".output_filtered.tsv","w")
 
     countNAremoved = 0
     countLine = 0
@@ -227,8 +229,9 @@ if __name__ == '__main__':
         for line in lines: 
             
             elements = line.strip().split("\t")
-
-            if(countLine in [0,1]):
+            
+            if(countLine in range(0,int(parameters.number_of_annotation))):
+                print("ANNOTATION : ")
                 result.write(line)
                 print(line)
                 countLine+=1
