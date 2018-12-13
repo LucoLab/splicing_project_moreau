@@ -98,7 +98,7 @@ This will create a matrice named eventType.output.tsv for the event you will pro
  -e /home/jean-philippe.villemin/moreau_splicing/output/CE.whippet.tsv -t CE
 ```
 
--t : Specify the type of event you process. This will be used in the output name. Here the output will be eventType.output.tsv.
+- -t : Specify the type of event you process. This will be used in the output name. Here the output will be eventType.output.tsv.
 
 
 
@@ -118,8 +118,8 @@ You can do it by yourself with your own scripts or I provide some tools that wil
  ```
 
 This script work with a provided list of genes symbol.  So your are not force to use a gene lists. It's optional.  
-- o : let you set name of your output. here output will be called CE_JP.output_filtered.ts  
--a : It's the number of annotation you used. The number of columns you set in ID_2_GROUP.tsv.
+- -o : let you set name of your output. here output will be called CE_JP.output_filtered.ts  
+- -a : It's the number of annotation you used. The number of columns you set in ID_2_GROUP.tsv.
 
 You filtering by event if more than 25 % NA values computed and if variance < 0.05 for the event.(arbitrary , need to improve that)
 
