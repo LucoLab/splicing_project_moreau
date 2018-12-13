@@ -41,12 +41,16 @@ def parse_listing(file) :
     
     dictSamples = {}
     count       =  0
+    list_groups = []
     
     with open(file) as lines:
         for line in lines:
              
             if(count==0):
                 count+=1
+               
+                list_groups = line.strip().split("\t")
+                #print(list_groups)
                 continue
             
             elements = line.strip().split("\t")
@@ -61,12 +65,16 @@ def parse_listing(file) :
             
             if elements[0] not in dictSamples :
                 dictSamples[elements[0]] = { }
-                
-            dictSamples[elements[0]]["group"] = elements[1]
+            
+            for name_group in list_groups :
+                #print(name_group)
+                #print(list_groups.index(name_group))
+                #print(elements)
+                dictSamples[elements[0]][name_group] = elements[list_groups.index(name_group)]
           
     lines.close()
 
-    return dictSamples
+    return dictSamples,list_groups
 
 def parse_exons(file) : 
     """
@@ -157,39 +165,28 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=textwrap.dedent ('''\
     Thi script will create a clean matrice with all psi.  
     Example : 
-    python3 /home/jean-philippe.villemin/code/RNA-SEQ/src/prepareDataForHeatmap.py  
-    -l /home/jean-philippe.villemin/lakitu/PROJECT/BEAUTY/BEAUTY_JP.csv  
-    -d /home/jean-philippe.villemin/lakitu/PROJECT/BEAUTY/output/
-    -e /home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv
+    /home/jean-philippe.villemin/anaconda3/bin/python3 /home/jean-philippe.villemin/splicing_project_moreau/src/prepareDataForHeatmap.py  -l /home/jean-philippe.villemin/moreau_splicing_test/ID_2_GROUP.tsv -d /home/jean-philippe.villemin/moreau_splicing_test/output/ -e /home/jean-philippe.villemin/CE.whippet.tsv -t CE
         
     '''),formatter_class=argparse.RawDescriptionHelpFormatter)
     
     parser.add_argument("-l","--listing",action="store",help="Path to all annotation",required=True,type=str,dest='listing')
     parser.add_argument("-d","--dir",action="store",help="Path to dir",required=True,type=str,dest='dir')
     parser.add_argument("-e","--exons",action="store",help="Path to exons",required=True,type=str,dest='exonfile')
+    parser.add_argument("-t","--type",action="store",help="TYPE_EVENT",required=True,type=str,dest='type')
 
     parameters = parser.parse_args()
     
-    # Truc simple pour avoir un fichier standard IDSAMPLE -> GROUP
-    #/usr/bin/gawk -F ";" 'BEGIN {OFS="\t"} {print $3,$6}'  /home/luco/PROJECT/BEAUTY/BEAUTY_JP.csv > /home/luco/PROJECT/BEAUTY/BEAUTY_ID2GROUP.tsv
-    
-    # Je parsais le resultats de l'interset du bedtools.
-    # let us create CE.whippet.bed
-    #/usr/bin/gawk -F ","  'BEGIN {OFS="\t";}  {  if ( match($4, "^(chr.*):([0-9]+)-([0-9]+)", ary) ) print ary[1],ary[2]-1,ary[3],NR-1,0,$5 ;}' /home/luco/PROJECT/BEAUTY/output/EX173639.CE.psiannoted.csv 
-    
-    #Tu peux faire un intersect de tes exons avec la liste de whippet
-    #bedtools intersect -wo -filenames -f 0.8 -r -names T5 T1 -a /home/jean-philippe.villemin/data/data/CE.whippet.bed -b /home/jean-philippe.villemin/data/data/EMT_rmats/T5PolyA_vs_unTPolyA/SE/T5PolyA_vs_unTPolyA.sorted.ALL.SE.bed /home/jean-philippe.villemin/data/data/EMT_rmats/T1PolyA_vs_unTPolyA/SE/T1PolyA_vs_unTPolyA.sorted.ALL.SE.bed > /home/jean-philippe.villemin/data/data/intersect.80perc.exons.T1.T5.EMT.tsv
+    dictPatients,list_groups = parse_listing(parameters.listing)
 
     #/home/luco/PROJECT/TCGA/TCGA/CE.whippet.tsv
     dictExons    = parse_exons(parameters.exonfile)
 
-    dictPatients = parse_listing(parameters.listing)
     
-    allSampleFiles = [f for f in listdir(parameters.dir) if (isfile(join(parameters.dir, f)) and f.endswith('CE.psiannoted.csv') and not f.startswith('.')) ]
+    allSampleFiles = [f for f in listdir(parameters.dir) if (isfile(join(parameters.dir, f)) and f.endswith(parameters.type+'.psiannoted.csv') and not f.startswith('.')) ]
 
     columCells = []
     
-    result = open(os.path.dirname(parameters.listing)+"/"+"output.tsv","w")
+    result = open(os.path.dirname(parameters.listing)+"/"+parameters.type+".output.tsv","w")
     
 
     for psiFile in allSampleFiles : 
@@ -202,16 +199,27 @@ if __name__ == '__main__':
         
         readAllPsis(dictExons,dictPatients,parameters.dir+""+psiFile,elements[0])
 
-    patientLine = ["",""]
-    group       = ["",""]
+    
+    
+    list_several_group = [[] for x in range(0,len(list_groups))]
+
+    count_i=0
+    for name_group in list_groups :
+            list_several_group[count_i].append("")
+            list_several_group[count_i].append("")
+            count_i+=1
+
 
     for personID in columCells  : 
      
-          patientLine.append("Patient: "+personID)
-          group.append("Group: "+dictPatients[personID]["group"])
+        count=0
+        for name_group in list_groups :
+            list_several_group[count].append(dictPatients[personID][name_group])
+            count+=1
 
-    result.write("\t".join(patientLine)+"\n")
-    result.write("\t".join(group)+"\n")
+    for group_listed in list_several_group :   
+        #print(group_listed)    
+        result.write("\t".join(group_listed)+"\n")
 
     for indiceWhippet in sorted(dictExons.keys()) :
         
